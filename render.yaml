@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: rentease
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: "80"

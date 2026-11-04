@@ -1,0 +1,7 @@
+database/*.sqlite
+database/*.sqlite-journal
+.DS_Store
+*.log
+Report/__pycache__/
+Report2/__pycache__/
+Report2/content/__pycache__/
