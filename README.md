@@ -65,10 +65,8 @@ RentEase/
 ├── assets/css/style.css      all styling
 ├── assets/js/main.js         all client-side behaviour
 ├── assets/properties/        listing images
-├── database/rentease.sql     schema + seed data
-├── scripts/make_images.py    regenerates the demo images
-├── scripts/shoot.py          captures the report screenshots
-└── screenshots/              captured application screens (11)
+├── database/rentease.sql          MySQL schema + seed
+└── database/seed_sqlite.sql       portable seed used by the fallback
 ```
 
 ---
@@ -159,11 +157,30 @@ users ──┬──< properties ──┬──< property_images
 
 ---
 
-## Regenerating report assets
+## Hosting
 
-```bash
-python scripts/make_images.py     # redraw the property illustrations
-python scripts/shoot.py           # capture screenshots/ (needs the PHP server running)
-```
+Free hosts have no MySQL service, so the app does this automatically:
 
-`screenshots/` feeds the mini-project report in `Report/`.
+1. Tries MySQL first.
+2. Falls back to SQLite, creating and seeding `database/rentease.sqlite` on the
+   first request.
+
+**Render** (permanent URL): New -> Blueprint -> pick the repo. `render.yaml`
+selects the Docker runtime and `Dockerfile` installs PHP 8.3 + Apache with
+`pdo_sqlite` and `pdo_mysql`.
+
+Render has no native PHP runtime, so Docker is required.
+
+**Caveat:** a free-tier filesystem is ephemeral, so records added through the UI
+reset when the instance restarts. Seed data always returns. Point `config/db.php`
+at a hosted MySQL for durable storage.
+
+## Demo accounts
+
+| Role | Email | Password |
+|---|---|---|
+| Owner | `ragav.owner@rentease.in` | `rent@1234` |
+| Owner | `meera.owner@rentease.in` | `rent@1234` |
+| Tenant | `arjun.tenant@rentease.in` | `rent@1234` |
+| Tenant | `divya.tenant@rentease.in` | `rent@1234` |
+| Tenant | `karthik.tenant@rentease.in` | `rent@1234` |
